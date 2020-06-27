@@ -1,0 +1,20 @@
+import java.text.SimpleDateFormat
+node{
+    stage('app'){
+        sleep(1)
+    }
+    stage('stage2'){
+        echo "Hi"
+    }
+    stage('cosmos'){
+        def a="Gir"
+        def b="Hub"
+        println(a+b)
+
+    }
+    stage('Simple_change'){
+        def date = new Date()
+        def sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+        println sdf.format(date)
+    }
+}
