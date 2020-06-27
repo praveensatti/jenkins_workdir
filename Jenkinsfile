@@ -1,6 +1,6 @@
 node{
     stage('checkout_GitLab'){
-        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'GitLab', url: 'https://gitlab.com/praveensatti/jenkins_workdir.git']]])
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'GitLab', url: 'https://github.com/praveensatti/jenkins_workdir.git']]])
     }
     stage("bash_file"){
         sh label: '', script: 'sh first_script.sh'
