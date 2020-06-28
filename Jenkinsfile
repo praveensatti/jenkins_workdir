@@ -1,19 +1,23 @@
 node{
+    parameters {
+        string(name: 'imagename', defaultValue: 'python_flask_app', description: 'def name to build image')
+        string(name: 'version', defaultValue: 'v1', description: 'def version to build image')
+
+    }
     stage('checkout_GitLab'){
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'GitLab', url: 'https://github.com/praveensatti/jenkins_workdir.git']]])
     }
-    stage("bash_file"){
-        sh label: '', script: 'sh first_script.sh'
+    stage('Dcoekr build'){
+        def testImage = "docker build -t  praveensatti/${imagename}:${version} ."
+        sh(testImage)
+      // def customImage = docker.build("$(imagename)", "Dockerfile")
     }
-    stage("Play_Run"){
-        sh "echo \"Helow world\" "
-        //sh "#!/bin/bash \n"  + "ansible-playbook jplay.yml -i jen_inventory --remote-user praveensatti"
-        // sh $ansible
-        //ansiblePlaybook colorized: true, credentialsId: 'hostlogin', disableHostKeyChecking: true, installation: 'ansible', inventory: 'jen_inventory', playbook: 'jplay.yml'
+    stage("Push_image"){
+        def comm="docker push praveensatti/${imagename}:${version}"
+        sh(comm)
     }
-    stage('MVN'){
-        def var1 = 'cd && pwd'
-        sh (var1)
-        
+    stage("Removing_local_image"){
+        def ot="docker rmi praveensatti/${imagename}:${version}"
+        sh(ot)
     }
 }
