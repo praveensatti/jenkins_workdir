@@ -1,0 +1,23 @@
+node{
+    parameters {
+        string(name: 'Imagename', defaultValue: 'python_flask_assistant', description: 'def name to build image')
+        string(name: 'Version', defaultValue: 'Release_v1', description: 'def version to build image')
+
+    }
+    stage('Git_checkout'){
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'GitLab', url: 'https://github.com/praveensatti/jenkins_workdir.git']]])
+    }
+    stage('Docker_Build'){
+        def Docker_image = " cd src && docker build -t  praveensatti/${Imagename}:${Version} ."
+        sh(Docker_image)
+      // def Docker_image = docker.build("praveensatti/${Imagename}:${Version}", "Dockerfile")
+    }
+    stage("Push_image"){
+        def comm="docker push praveensatti/${Imagename}:${Version}"
+        sh(comm)
+    }
+    stage("Removing_local_image"){
+        def ot="docker rmi praveensatti/${Imagename}:${Version}"
+        sh(ot)
+    }
+}
